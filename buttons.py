@@ -2,8 +2,8 @@ import RPi.GPIO as GPIO
 import time
 import os
 
-GPIO_RELOAD=2
-GPIO_SHUTDOWN=5
+GPIO_RELOAD=14
+GPIO_SHUTDOWN=16
 
 # GPIO setup
 GPIO.setmode(GPIO.BCM)
