@@ -28,7 +28,7 @@ try:
             time.sleep(0.5)
         # Check if Shutdown button is pressed
         if GPIO.input(GPIO_SHUTDOWN) == False:
-            reload_chromium()
+            shutdown()
             # Debounce delay
             time.sleep(0.5)
 except KeyboardInterrupt:
