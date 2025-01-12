@@ -25,7 +25,7 @@ const generateImage = async () => {
   const randomPainting =
     paintings[Math.floor(Math.random() * paintings.length)];
 
-  const prompt = `Generate a modern day reinterpretation of the famous painting ${randomPainting[0]} by ${randomPainting[1]} in portrait aspect ratio (9:16). Make sure the picture uses all the available space in the generated image and there is no border, spacing, padding or picture frame around the image. There may also be no painting frame visible. The generated image must be a portrait and the subject is presented in upright position (vertically, never rotated 90 degrees on its side).`;
+  const prompt = `Generate a modern day reinterpretation of the famous painting "${randomPainting[0]}" by the artist "${randomPainting[1]}" in portrait aspect ratio (9:16). Make sure the picture uses all the available space in the generated image and there is no border, spacing, padding or picture frame around the image. There may also be no painting frame visible. The generated image must be a portrait and the subject is presented in upright position (vertically, never rotated 90 degrees on its side).`;
   const apiKey = process.env.OPENAI_API_KEY;
 
   console.log("Executing prompt:", prompt);
