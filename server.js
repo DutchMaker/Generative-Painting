@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const { randomInt } = require('crypto');
 
 require('dotenv').config();
 
@@ -19,11 +20,12 @@ const paintings = [
   ["The Son of Man", "René Magritte"],
   ["The Milkmaid", "Johannes Vermeer"],
   ["Self-Portrait", "Rembrandt van Rijn"],
+  ["The persistence of Memory", "Salvador Dali"],
 ];
 
 const generateImage = async () => {
   const randomPainting =
-    paintings[Math.floor(Math.random() * paintings.length)];
+    paintings[randomInt(0, paintings.length)];
 
   const prompt = `Generate a modern day reinterpretation of the famous painting "${randomPainting[0]}" by the artist "${randomPainting[1]}" in portrait aspect ratio (9:16). Make sure the picture uses all the available space in the generated image and there is no border, spacing, padding or picture frame around the image. There may also be no painting frame visible. The generated image must be a portrait and the subject is presented in upright position (vertically, never rotated 90 degrees on its side).`;
   const apiKey = process.env.OPENAI_API_KEY;
@@ -87,16 +89,29 @@ const saveImage = async (url) => {
 app.use(express.static('public'));
 
 app.get("/image", async (req, res) => {
-  const imageUrl = await generateImage();
+  try {
+    const imageUrl = await generateImage();
 
-  if (imageUrl) {
-    res.redirect(await saveImage(imageUrl));
-  } else {
+    if (imageUrl) {
+      res.redirect(await saveImage(imageUrl));
+      return;
+    }
+  }
+  catch (error) {
+    console.error("Error generating image:", error);
+  }
+
+  // Error, find a file we generated before
+  const files = fs.readdirSync(path.resolve(__dirname, "public", "generated")).filter(file => path.extname(file).toLocaleLowerCase() === ".png");
+
+  if (files.length === 0) {
     res.redirect("/assets/error.webp")
   }
+  else {
+    const file = files[randomInt(0, files.length)];
+    res.redirect(`/generated/${file}`);
+  }
 });
-
-app.get
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
